@@ -1,11 +1,7 @@
-const db = require("../db/index");
-const fs = require("fs/promises");
+const apiInfo = require("../endpoints.json");
 
-async function displayApiInformation() {
-  const apiInformation = await fs.readFile("../endpoints.json", "utf-8");
-  console.log(apiInformation);
-
-  return apiInformation;
+function displayApiInformation() {
+  return apiInfo;
 }
 
 module.exports = displayApiInformation;
