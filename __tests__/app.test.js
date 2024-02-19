@@ -36,7 +36,7 @@ describe("GET /api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        expect(typeof response.text).toBe("string");
+        expect(typeof response.body).toBe("object");
       });
   });
   test("should check that the file return from the endpoint is equal to the endpoints.json required in to the test suite", () => {
@@ -44,8 +44,7 @@ describe("GET /api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        const parsedApiInfo = JSON.stringify(apiInformation, null, 2);
-        expect(response.text).toEqual(parsedApiInfo);
+        expect(response.body).toEqual(apiInformation);
       });
   });
 });
@@ -60,13 +59,14 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(response.body).toHaveProperty("title");
-        expect(response.body).toHaveProperty("topic");
-        expect(response.body).toHaveProperty("author");
-        expect(response.body).toHaveProperty("body");
-        expect(response.body).toHaveProperty("created_at");
-        expect(response.body).toHaveProperty("votes");
-        expect(response.body).toHaveProperty("article_img_url");
+        const article = response.body;
+        expect(article).toHaveProperty("title");
+        expect(article).toHaveProperty("topic");
+        expect(article).toHaveProperty("author");
+        expect(article).toHaveProperty("body");
+        expect(article).toHaveProperty("created_at");
+        expect(article).toHaveProperty("votes");
+        expect(article).toHaveProperty("article_img_url");
       });
   });
 });
