@@ -36,7 +36,16 @@ describe("GET /api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        console.log(response.body);
+        expect(typeof response.text).toBe("string");
+      });
+  });
+  test("should check that the file return from the endpoint is equal to the endpoints.json required in to the test suite", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response) => {
+        const parsedApiInfo = JSON.stringify(apiInformation, null, 2);
+        expect(response.text).toEqual(parsedApiInfo);
       });
   });
 });
