@@ -49,3 +49,27 @@ describe("GET /api", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("should respond with 200 status code", () => {
+    return request(app).get("/api/articles/1").expect(200);
+  });
+
+  test("should return a specific article based on its id", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toHaveProperty("title");
+        expect(response.body).toHaveProperty("topic");
+        expect(response.body).toHaveProperty("author");
+        expect(response.body).toHaveProperty("body");
+        expect(response.body).toHaveProperty("created_at");
+        expect(response.body).toHaveProperty("votes");
+        expect(response.body).toHaveProperty("article_img_url");
+      });
+  });
+});
+
+//id number too high
+//text instead of a number
