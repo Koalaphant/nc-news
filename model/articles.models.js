@@ -27,7 +27,7 @@ function selectAllArticles() {
   articles.created_at,
   articles.votes,
   articles.article_img_url,
-  COUNT(comments.comment_id) AS comment_count
+  COUNT(comments.comment_id)::integer AS comment_count
 FROM 
   articles
 LEFT JOIN 
