@@ -7,11 +7,19 @@ function selectArticleById(articleId) {
     articleId
   );
 
-  return db.query(queryString);
+  return db.query(queryString).then((result) => {
+    if (result.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "id not found" });
+    }
+
+    return result.rows[0];
+  });
 }
 
 function selectAllArticles() {
-  return db.query(`SELECT 
+  return db
+    .query(
+      `SELECT 
   articles.author,
   articles.title,
   articles.article_id,
@@ -27,7 +35,11 @@ LEFT JOIN
 GROUP BY 
   articles.article_id
 ORDER BY 
-  articles.created_at DESC`);
+  articles.created_at DESC`
+    )
+    .then((result) => {
+      return result.rows;
+    });
 }
 
 module.exports = { selectArticleById, selectAllArticles };
