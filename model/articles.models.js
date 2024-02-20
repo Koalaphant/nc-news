@@ -17,7 +17,9 @@ function selectArticleById(articleId) {
 }
 
 function selectAllArticles() {
-  return db.query(`SELECT 
+  return db
+    .query(
+      `SELECT 
   articles.author,
   articles.title,
   articles.article_id,
@@ -33,7 +35,11 @@ LEFT JOIN
 GROUP BY 
   articles.article_id
 ORDER BY 
-  articles.created_at DESC`);
+  articles.created_at DESC`
+    )
+    .then((result) => {
+      return result.rows;
+    });
 }
 
 module.exports = { selectArticleById, selectAllArticles };

@@ -72,7 +72,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        const article = response.body;
+        const { article } = response.body;
         expect(article).toHaveProperty("title");
         expect(article).toHaveProperty("topic");
         expect(article).toHaveProperty("author");
@@ -110,7 +110,7 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then((response) => {
-        const articles = response.body;
+        const { articles } = response.body;
         expect(articles.length).toBe(13);
 
         articles.forEach((article) => {
@@ -131,7 +131,7 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then((response) => {
-        const articles = response.body;
+        const { articles } = response.body;
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });

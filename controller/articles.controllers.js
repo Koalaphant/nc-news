@@ -9,7 +9,7 @@ function getArticlesById(request, response, next) {
   selectArticleById(articleId)
     .then((article) => {
       console.log(article);
-      response.status(200).send(article);
+      response.status(200).send({ article });
     })
     .catch((err) => {
       next(err);
@@ -19,7 +19,7 @@ function getArticlesById(request, response, next) {
 function getAllArticles(request, response, next) {
   selectAllArticles()
     .then((articles) => {
-      response.status(200).send(articles.rows);
+      response.status(200).send({ articles });
     })
     .catch((err) => {
       next(err);
