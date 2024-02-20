@@ -1,7 +1,6 @@
-const displayApiInformation = require("../model/api.models");
+const apiInfo = require("../endpoints.json");
 
 function getApiInformation(request, response, next) {
-  const apiInfo = displayApiInformation();
   response.status(200).send(apiInfo);
 }
 
