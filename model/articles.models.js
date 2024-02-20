@@ -7,7 +7,13 @@ function selectArticleById(articleId) {
     articleId
   );
 
-  return db.query(queryString);
+  return db.query(queryString).then((result) => {
+    if (result.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "id not found" });
+    }
+
+    return result.rows[0];
+  });
 }
 
 function selectAllArticles() {
