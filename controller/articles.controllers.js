@@ -8,7 +8,6 @@ function getArticlesById(request, response, next) {
 
   selectArticleById(articleId)
     .then((article) => {
-      console.log(article);
       response.status(200).send({ article });
     })
     .catch((err) => {

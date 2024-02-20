@@ -32,7 +32,7 @@ describe("GET /api/topics ", () => {
       .get("/api/topics")
       .expect(200)
       .then((response) => {
-        const topics = response.body;
+        const { topics } = response.body;
         expect(topics.length).toBe(3);
 
         topics.forEach((topic) => {
