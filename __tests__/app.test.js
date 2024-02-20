@@ -13,6 +13,18 @@ afterAll(() => {
   return db.end();
 });
 
+describe("path not found", () => {
+  test("should return a 404 if path does not exist ", () => {
+    return request(app)
+      .get("/api/wrongpath")
+      .expect(404)
+      .then((response) => {
+        const error = response.body;
+        expect(error.msg).toBe("path not found");
+      });
+  });
+});
+
 describe("GET /api/topics ", () => {
   test("should fetch all topics", () => {
     return request(app)
@@ -69,7 +81,24 @@ describe("GET /api/articles/:article_id", () => {
         expect(article).toHaveProperty("article_img_url");
       });
   });
-});
 
-//id number too high
-//text instead of a number
+  test("should respond with an error if given a topic_id of an invalid type (NaN)", () => {
+    return request(app)
+      .get("/api/articles/nonsense")
+      .expect(400)
+      .then((response) => {
+        const error = response.body;
+        expect(error.msg).toBe("bad request");
+      });
+  });
+
+  test("should respond with an error if given a topic_id of a valid type that does not exist in our database", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then((response) => {
+        const error = response.body;
+        expect(error.msg).toBe("id not found");
+      });
+  });
+});
