@@ -140,3 +140,60 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("should respond with 200 status code", () => {
+    return request(app).get("/api/articles/1/comments").expect(200);
+  });
+
+  test("should receive a 404 status code if given article_id of a valid type that does not exist in the database ", () => {
+    return request(app)
+      .get("/api/articles/3333/comments")
+      .expect(404)
+      .then((response) => {
+        const error = response.body;
+        expect(error.msg).toBe("id not found");
+      });
+  });
+
+  test("should respond with an error if given a article_id of an invalid type (NaN)", () => {
+    return request(app)
+      .get("/api/articles/nonsense/comments")
+      .expect(400)
+      .then((response) => {
+        const error = response.body;
+        expect(error.msg).toBe("bad request");
+      });
+  });
+
+  test("should return an array of comments for the given article_id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        const articleId = 1;
+        expect(Array.isArray(comments)).toBe(true);
+
+        comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id");
+          expect(comment).toHaveProperty("votes");
+          expect(comment).toHaveProperty("created_at");
+          expect(comment).toHaveProperty("author");
+          expect(comment).toHaveProperty("body");
+          expect(comment).toHaveProperty("article_id");
+          expect(comment.article_id).toBe(articleId);
+        });
+      });
+  });
+
+  test("should check the array is being returned in a descending order with the most recent comments first", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const { comments } = response.body;
+        expect(comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+});

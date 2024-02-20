@@ -42,4 +42,23 @@ ORDER BY
     });
 }
 
-module.exports = { selectArticleById, selectAllArticles };
+function selectCommentsByArticleId(articleId) {
+  const queryString = format(
+    "SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id = %L ORDER BY created_at DESC",
+    articleId
+  );
+
+  return db.query(queryString).then((result) => {
+    if (result.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "id not found" });
+    }
+
+    return result.rows;
+  });
+}
+
+module.exports = {
+  selectArticleById,
+  selectAllArticles,
+  selectCommentsByArticleId,
+};
