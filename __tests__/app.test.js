@@ -4,14 +4,13 @@ const app = require("../app");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
 const apiInformation = require("../endpoints.json");
-const articles = require("../db/data/test-data/articles");
 
 beforeEach(() => {
   return seed(data);
 });
 
 afterAll(() => {
-  return db.end();
+  db.end();
 });
 
 describe("path not found", () => {
@@ -25,6 +24,8 @@ describe("path not found", () => {
       });
   });
 });
+
+/* ============ GET TESTS ============ */
 
 describe("GET /api/topics ", () => {
   test("should fetch all topics", () => {
@@ -196,6 +197,84 @@ describe("GET /api/articles/:article_id/comments", () => {
       .then((response) => {
         const { comments } = response.body;
         expect(comments).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+});
+
+/* ============ POST TESTS ============ */
+describe("POST /api/articles/:article_id/comments", () => {
+  test("POST 201 inserts a new comment for a specific article", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "Cool post!",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.comment.author).toBe("butter_bridge");
+        expect(response.body.comment.body).toBe("Cool post!");
+      });
+  });
+
+  test("should return a 404 if article_id does not exist ", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "Cool post!",
+    };
+
+    return request(app)
+      .post("/api/articles/3333/comments")
+      .send(newComment)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("no id exists");
+      });
+  });
+
+  test("should return a 400 if the article_id is not valid", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "Cool post!",
+    };
+
+    return request(app)
+      .post("/api/articles/nonsense/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("bad request");
+      });
+  });
+
+  test("should return a 400 if the comment is missing keys", () => {
+    const newComment = {
+      body: "Cool post!",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("bad request");
+      });
+  });
+
+  test("should return a 404 error if the username is not registered", () => {
+    const newComment = {
+      username: "user1",
+      body: "Hey! Cool post!",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("username does not exist");
       });
   });
 });

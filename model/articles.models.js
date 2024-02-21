@@ -57,8 +57,29 @@ function selectCommentsByArticleId(articleId) {
   });
 }
 
+function insertComment({ article_id, username, body }) {
+  const commentData = {
+    author: username,
+    body: body,
+  };
+
+  if (!article_id || !username || !body) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+
+  return db
+    .query(
+      "INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *;",
+      [article_id, commentData.author, commentData.body]
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+}
+
 module.exports = {
   selectArticleById,
   selectAllArticles,
   selectCommentsByArticleId,
+  insertComment,
 };
