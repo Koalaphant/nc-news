@@ -2,6 +2,7 @@ const {
   selectArticleById,
   selectAllArticles,
   selectCommentsByArticleId,
+  insertComment,
 } = require("../model/articles.models");
 
 function getArticlesById(request, response, next) {
@@ -37,4 +38,22 @@ function getCommentsByArticleID(request, response, next) {
     });
 }
 
-module.exports = { getArticlesById, getAllArticles, getCommentsByArticleID };
+function postComment(request, response, next) {
+  const { article_id } = request.params;
+  const { username, body } = request.body;
+
+  insertComment({ article_id, username, body })
+    .then((comment) => {
+      response.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
+module.exports = {
+  getArticlesById,
+  getAllArticles,
+  getCommentsByArticleID,
+  postComment,
+};
