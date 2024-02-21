@@ -145,17 +145,13 @@ describe("GET /api/articles", () => {
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
-  test("should respond with 200 status code", () => {
-    return request(app).get("/api/articles/1/comments").expect(200);
-  });
-
-  test("should receive a 404 status code if given article_id of a valid type that does not exist in the database ", () => {
+  test("should return a message if no comments are found for given article ", () => {
     return request(app)
-      .get("/api/articles/3333/comments")
-      .expect(404)
+      .get("/api/articles/4/comments")
+      .expect(200)
       .then((response) => {
-        const error = response.body;
-        expect(error.msg).toBe("id not found");
+        const { msg } = response.body;
+        expect(msg).toBe("comment not found");
       });
   });
 

@@ -31,8 +31,14 @@ function getCommentsByArticleID(request, response, next) {
   const articleId = request.params.article_id;
   selectCommentsByArticleId(articleId)
     .then((comments) => {
+      if (comments.length === 0) {
+        response
+          .status(200)
+          .send({ msg: "comment not found" });
+      }
       response.status(200).send({ comments });
     })
+
     .catch((err) => {
       next(err);
     });
