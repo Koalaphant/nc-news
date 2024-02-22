@@ -73,9 +73,30 @@ function insertComment({ article_id, username, body }) {
     });
 }
 
+function ammendArticle(inc_votes, article_id) {
+  const queryString = `
+  UPDATE articles
+  SET
+  votes = votes + $1
+  WHERE article_id = $2
+  RETURNING *;
+  `;
+
+  return db.query(queryString, [inc_votes, article_id]).then(({ rows }) => {
+    const patchedArticle = rows[0];
+
+    if (!patchedArticle) {
+      return Promise.reject({ status: 404, msg: "article not found" });
+    }
+
+    return patchedArticle;
+  });
+}
+
 module.exports = {
   selectArticleById,
   selectAllArticles,
   selectCommentsByArticleId,
   insertComment,
+  ammendArticle,
 };
