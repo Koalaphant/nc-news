@@ -20,7 +20,8 @@ function getArticlesById(request, response, next) {
 }
 
 function getAllArticles(request, response, next) {
-  selectAllArticles()
+  const { topic } = request.query;
+  selectAllArticles(topic)
     .then((articles) => {
       response.status(200).send({ articles });
     })
