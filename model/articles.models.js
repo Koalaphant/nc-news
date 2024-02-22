@@ -105,7 +105,7 @@ function removeComment(comment_id) {
     )
     .then((response) => {
       if (response.rowCount === 0) {
-        Promise.reject({ status: 404, msg: "comment not found" });
+        return Promise.reject({ status: 404, msg: "comment not found" });
       }
     });
 }
