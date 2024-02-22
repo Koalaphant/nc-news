@@ -93,10 +93,28 @@ function ammendArticle(inc_votes, article_id) {
   });
 }
 
+/* MOVE THIS AND OTHER COMMENTS MODELS TO THEIR OWN FILE */
+
+function removeComment(comment_id) {
+  return db
+    .query(
+      `DELETE FROM comments
+    WHERE comment_id = $1
+    RETURNING *`,
+      [comment_id]
+    )
+    .then((response) => {
+      if (response.rowCount === 0) {
+        Promise.reject({ status: 404, msg: "comment not found" });
+      }
+    });
+}
+
 module.exports = {
   selectArticleById,
   selectAllArticles,
   selectCommentsByArticleId,
   insertComment,
   ammendArticle,
+  removeComment,
 };
