@@ -4,6 +4,7 @@ const {
   selectCommentsByArticleId,
   insertComment,
   ammendArticle,
+  removeComment,
 } = require("../model/articles.models");
 
 function getArticlesById(request, response, next) {
@@ -69,10 +70,25 @@ function patchArticle(request, response, next) {
     });
 }
 
+/* MOVE THIS AND OTHER COMMENTS CONTROLLERS TO THEIR OWN FILE */
+
+function deleteComment(request, response, next) {
+  const { comment_id } = request.params;
+
+  removeComment(comment_id)
+    .then(() => {
+      response.status(204).send();
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
 module.exports = {
   getArticlesById,
   getAllArticles,
   getCommentsByArticleID,
   postComment,
   patchArticle,
+  deleteComment,
 };

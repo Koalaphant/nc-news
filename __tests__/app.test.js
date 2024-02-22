@@ -346,3 +346,43 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+/* ============ DELETE TESTS ============ */
+
+describe("DELETE /api/comments/comment_id", () => {
+  test("should respond with 204 when comment is deleted", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(() => {
+        return db
+          .query(
+            `
+        SELECT * FROM comments
+        WHERE comment_id = 1;
+        `
+          )
+          .then(({ rows }) => {
+            expect(rows.length).toBe(0);
+          });
+      });
+  });
+
+  test("should return 400 if comment id is invalid", () => {
+    return request(app)
+      .delete("/api/comments/nonsense")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+
+  test("should return 404 if comment id is valid but doesnt exist ", () => {
+    return request(app)
+      .delete("/api/comments/999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("comment not found");
+      });
+  });
+});
