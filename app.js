@@ -9,6 +9,7 @@ const {
   patchArticle,
   deleteComment,
 } = require("./controller/articles.controllers");
+const getUsers = require("./controller/users.controllers");
 
 const app = express();
 app.use(express.json());

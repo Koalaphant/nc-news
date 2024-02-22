@@ -206,7 +206,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     };
 
     return request(app)
-      .post("/api/articles/1/comments")
+      .post("/api/articles/2/comments")
       .send(newComment)
       .expect(201)
       .then((response) => {
