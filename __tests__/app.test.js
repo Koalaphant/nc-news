@@ -197,6 +197,26 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("GET /api/users", () => {
+  test("should respond with an array of objects and a 200 status ", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(Array.isArray(users)).toBe(true);
+        expect(users.length).toBe(4);
+
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
+  });
+});
+
 /* ============ POST TESTS ============ */
 describe("POST /api/articles/:article_id/comments", () => {
   test("POST 201 inserts a new comment for a specific article", () => {
