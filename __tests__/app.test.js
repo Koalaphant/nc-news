@@ -274,3 +274,75 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+/* ============ PATCH TESTS ============ */
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("should return patched article with an updated vote value", () => {
+    const patchObj = { inc_votes: 3 };
+
+    return request(app)
+      .patch(`/api/articles/1`)
+      .send(patchObj)
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toMatchObject({
+          article_id: 1,
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: 103,
+          article_img_url: expect.any(String),
+        });
+      });
+  });
+
+  test("should return a 404 if the article is not found", () => {
+    const patchObj = { inc_votes: 3 };
+
+    return request(app)
+      .patch(`/api/articles/999`)
+      .send(patchObj)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("article not found");
+      });
+  });
+
+  test("should return a 400 if article is invalid", () => {
+    const patchObj = { inc_votes: 3 };
+
+    return request(app)
+      .patch(`/api/articles/nonsense`)
+      .send(patchObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+
+  test("should return a 400 if a comment provided is invalid", () => {
+    const patchObj = { inccc_votes: 3 };
+    return request(app)
+      .patch(`/api/articles/1`)
+      .send(patchObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+
+  test("should return a 400 if the vote value is invalid (NaN)", () => {
+    const patchObj = { inc_votes: "invalid" };
+    return request(app)
+      .patch(`/api/articles/1`)
+      .send(patchObj)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});

@@ -3,6 +3,7 @@ const {
   selectAllArticles,
   selectCommentsByArticleId,
   insertComment,
+  ammendArticle,
 } = require("../model/articles.models");
 
 function getArticlesById(request, response, next) {
@@ -32,9 +33,7 @@ function getCommentsByArticleID(request, response, next) {
   selectCommentsByArticleId(articleId)
     .then((comments) => {
       if (comments.length === 0) {
-        response
-          .status(200)
-          .send({ msg: "comment not found" });
+        response.status(200).send({ msg: "comment not found" });
       }
       response.status(200).send({ comments });
     })
@@ -57,9 +56,23 @@ function postComment(request, response, next) {
     });
 }
 
+function patchArticle(request, response, next) {
+  const { inc_votes } = request.body;
+  const { article_id } = request.params;
+
+  ammendArticle(inc_votes, article_id)
+    .then((article) => {
+      response.status(200).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
 module.exports = {
   getArticlesById,
   getAllArticles,
   getCommentsByArticleID,
   postComment,
+  patchArticle,
 };

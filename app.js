@@ -6,6 +6,7 @@ const {
   getAllArticles,
   getCommentsByArticleID,
   postComment,
+  patchArticle,
 } = require("./controller/articles.controllers");
 
 const app = express();
@@ -23,8 +24,14 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleID);
 
 app.post("/api/articles/:article_id/comments", postComment);
 
+app.patch("/api/articles/:article_id", patchArticle);
+
 app.use((err, request, response, next) => {
   if (err.code === "22P02") {
+    response.status(400).send({ msg: "bad request" });
+  }
+
+  if (err.code === "23502") {
     response.status(400).send({ msg: "bad request" });
   }
 
