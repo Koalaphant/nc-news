@@ -217,6 +217,31 @@ describe("GET /api/users", () => {
   });
 });
 
+describe("GET /api/articles query", () => {
+  test("should return an article that is filtered by the topic query", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(12);
+        articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+        });
+      });
+  });
+
+  test("should return a 404 error when given a valid query that is not present in our database", () => {
+    return request(app)
+      .get("/api/articles?topic=dogs")
+      .expect(404)
+      .then((response) => {
+        const error = response.body;
+        expect(error.msg).toBe("not found");
+      });
+  });
+});
+
 /* ============ POST TESTS ============ */
 describe("POST /api/articles/:article_id/comments", () => {
   test("POST 201 inserts a new comment for a specific article", () => {
