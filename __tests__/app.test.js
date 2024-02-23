@@ -231,13 +231,13 @@ describe("GET /api/articles query", () => {
       });
   });
 
-  test("should return a 404 error when given a valid query that is not present in our database", () => {
+  test("should give a 200 and return an empty array if topic exists but has no articles", () => {
     return request(app)
-      .get("/api/articles?topic=dogs")
-      .expect(404)
-      .then((response) => {
-        const error = response.body;
-        expect(error.msg).toBe("not found");
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toEqual([]);
       });
   });
 });
