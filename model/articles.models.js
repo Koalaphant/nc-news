@@ -50,9 +50,10 @@ function selectAllArticles(topic) {
 `;
 
   return db.query(sqlString, sqlParametersArr).then(({ rows }) => {
-    if (rows.length === 0) {
-      return Promise.reject({ status: 404, msg: "not found" });
+    if (topic && rows.length === 0) {
+      return [];
     }
+
     return rows;
   });
 }
