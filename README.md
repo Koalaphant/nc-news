@@ -10,17 +10,59 @@ You can access the hosted version of NC News [here](https://nc-news-nxya.onrende
 
 NC News is a web application that provides endpoints to interact with articles, comments, users, and topics. Here's a summary of the main functionalities:
 
-- **Get Topics**: Retrieve a list of available topics.
-- **Get Endpoints**: Get a list of all available endpoints.
-- **Get Article by ID**: Retrieve a single article by its ID.
-- **Get Articles**: Get a list of articles.
-- **Get Comments by Article ID**: Retrieve comments associated with a specific article.
-- **Add Comment**: Post a comment on a specific article.
-- **Update Article**: Update an existing article.
-- **Delete Comment**: Delete a comment.
-- **Get Users**: Retrieve a list of users.
-- **Filter and Sort Articles**: Query articles based on specific criteria.
-- **Get Comment Count**: Obtain the count of comments for a particular article.
+- **Get Topics**:
+
+  - Endpoint: `GET /api/topics`
+  - Description: Retrieves a list of available topics.
+
+- **Get Endpoints**:
+
+  - Endpoint: `GET /api`
+  - Description: Retrieves a list of all available endpoints.
+
+- **Get Article by ID**:
+
+  - Endpoint: `GET /api/articles/:article_id`
+  - Description: Retrieves a single article by its ID.
+
+- **Get Articles**:
+
+  - Endpoint: `GET /api/articles`
+  - Description: Retrieves a list of articles.
+
+- **Get Comments by Article ID**:
+
+  - Endpoint: `GET /api/articles/:article_id/comments`
+  - Description: Retrieves comments associated with a specific article.
+
+- **Add Comment**:
+
+  - Endpoint: `POST /api/articles/:article_id/comments`
+  - Description: Posts a comment on a specific article.
+
+- **Update Article**:
+
+  - Endpoint: `PATCH /api/articles/:article_id`
+  - Description: Updates an existing article.
+
+- **Delete Comment**:
+
+  - Endpoint: `DELETE /api/comments/:comment_id`
+  - Description: Deletes a comment.
+
+- **Get Users**:
+
+  - Endpoint: `GET /api/users`
+  - Description: Retrieves a list of users.
+
+- **Filter and Sort Articles**:
+
+  - Endpoint: `GET /api/articles (queries)`
+  - Description: Allows articles to be filtered and sorted.
+
+- **Get Comment Count**:
+  - Endpoint: `GET /api/articles/:article_id (comment count)`
+  - Description: Adds a comment count to the response when retrieving a single article.
 
 ## Getting Started
 
