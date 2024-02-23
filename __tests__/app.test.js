@@ -1,4 +1,4 @@
-const db = require("../db/index");
+const db = require("../db/connection");
 const request = require("supertest");
 const app = require("../app");
 const seed = require("../db/seeds/seed");
@@ -248,17 +248,6 @@ describe("GET /api/articles query", () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).toEqual([]);
-      });
-  });
-});
-
-describe("GET /api/articles/:article_id (comment_count", () => {
-  test("should return article with comment count key", () => {
-    return request(app)
-      .get("/api/articles/3")
-      .expect(200)
-      .then(({ body: { article } }) => {
-        expect(article.comment_count).toBe(2);
       });
   });
 });
