@@ -3,7 +3,19 @@ const format = require("pg-format");
 
 function selectArticleById(articleId) {
   const queryString = format(
-    "SELECT * FROM articles WHERE article_id = %L",
+    `
+    SELECT 
+      articles.*,
+      COUNT(comments.comment_id)::integer AS comment_count
+    FROM 
+      articles
+    LEFT JOIN 
+      comments ON articles.article_id = comments.article_id
+    WHERE 
+      articles.article_id = %L
+    GROUP BY 
+      articles.article_id;
+    `,
     articleId
   );
 
