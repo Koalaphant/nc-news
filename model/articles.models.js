@@ -1,9 +1,7 @@
 const db = require("../db/connection");
-const format = require("pg-format");
 
 function selectArticleById(articleId) {
-  const queryString = format(
-    `
+  const queryString = `
     SELECT 
       articles.*,
       COUNT(comments.comment_id)::integer AS comment_count
@@ -12,14 +10,12 @@ function selectArticleById(articleId) {
     LEFT JOIN 
       comments ON articles.article_id = comments.article_id
     WHERE 
-      articles.article_id = %L
+      articles.article_id = $1
     GROUP BY 
       articles.article_id;
-    `,
-    articleId
-  );
+    `;
 
-  return db.query(queryString).then((result) => {
+  return db.query(queryString, [articleId]).then((result) => {
     if (result.rows.length === 0) {
       return Promise.reject({ status: 404, msg: "id not found" });
     }
@@ -71,12 +67,9 @@ function selectAllArticles(topic) {
 }
 
 function selectCommentsByArticleId(articleId) {
-  const queryString = format(
-    "SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id = %L ORDER BY created_at DESC",
-    articleId
-  );
-
-  return db.query(queryString).then((result) => {
+  const queryString =
+    "SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id = $1 ORDER BY created_at DESC";
+  return db.query(queryString, [articleId]).then((result) => {
     return result.rows;
   });
 }
