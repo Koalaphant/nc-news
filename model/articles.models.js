@@ -28,6 +28,7 @@ function selectAllArticles(topic) {
   let sqlString = `
   SELECT
     articles.author,
+    articles.body,
     articles.title,
     articles.article_id,
     articles.topic,
