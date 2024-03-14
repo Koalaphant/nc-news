@@ -440,3 +440,47 @@ describe("DELETE /api/comments/comment_id", () => {
       });
   });
 });
+
+/* =========== QUERY TESTS ==============*/
+
+describe("should retrieve articles in the order they are queried", () => {
+  test("should return an article that is filtered by comment count descending", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=comment_count&order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("comment_count", { descending: true });
+      });
+  });
+
+  test("should return an article that is filtered by comment count ascending", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=comment_count&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("comment_count", { ascending: true });
+      });
+  });
+
+  test("should return an article that is filtered by title descending", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=title&order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("title", { descending: true });
+      });
+  });
+
+  test("should return an article that is filtered by title ascending", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toBeSortedBy("title", { ascending: true });
+      });
+  });
+});

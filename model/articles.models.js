@@ -24,7 +24,7 @@ function selectArticleById(articleId) {
   });
 }
 
-function selectAllArticles(topic) {
+function selectAllArticles(topic, sort_by = "created_at", order = "desc") {
   let sqlString = `
   SELECT
     articles.author,
@@ -55,7 +55,7 @@ function selectAllArticles(topic) {
   GROUP BY
     articles.article_id
   ORDER BY
-    articles.created_at DESC
+    ${sort_by} ${order.toUpperCase()}
 `;
 
   return db.query(sqlString, sqlParametersArr).then(({ rows }) => {
