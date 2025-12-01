@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ncnews
+      POSTGRES_USER: ncnews_app
+      POSTGRES_PASSWORD: ncnews_pass
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://ncnews_app:ncnews_pass@db:5432/ncnews
+      PORT: 9090
+    ports:
+      - "9090:9090"
+
+volumes:
+  db_data:

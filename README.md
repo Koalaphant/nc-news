@@ -145,6 +145,28 @@ npm run seed
 npm test
 ```
 
+## Containerised Setup
+
+This project ships with a `Dockerfile` and `docker-compose.yml` so you can run both the API and a Postgres instance locally or on a VPS.
+
+1. Build and start both services:
+
+   ```bash
+   docker compose up --build
+   ```
+
+   The API will be available on `http://localhost:9090` by default.
+
+2. Seed the database inside the container whenever you need fresh data:
+
+   ```bash
+   docker compose run --rm api npm run seed-prod
+   ```
+
+3. To customize credentials or ports, edit the environment variables in `docker-compose.yml` (and the matching `DATABASE_URL` string).
+
+Stop the stack with `docker compose down` and remove persisted Postgres data by adding the `-v` flag (this deletes the `db_data` volume).
+
 ## Version Information
 
 - Node.js: v-21
